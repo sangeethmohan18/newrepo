@@ -1,0 +1,2 @@
+# newrepo
+sample repository
