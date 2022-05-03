@@ -1,6 +1,6 @@
 pipeline{
 
-	agent { label 'slave2'}
+	agent any
 
 	stages {
 		
@@ -39,7 +39,15 @@ pipeline{
 
             }              
 
-		
+		stage(' slacknotification') {
+
+			steps {
+
+				slackSend channel: '#jenkins-slack', message: 'Build successful'
+
+				  }
+
+									}
 
 
 
