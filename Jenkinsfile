@@ -1,97 +1,92 @@
-pipeline{
+pipeline {
 
 	agent { label 'slave1'}
-
+	
 	stages {
+
+		stage ('Build stage') {
+
+			steps {
+
+				slackSend channel: 'jen-slackintegration', message: 'Build started: ${env.JOB_NAME} ${env.BUILD_ID}'
+
+				sh "mvn -B -DskipTests clean package"
+                   }
+            post {
+
+            	success {
+
+            		slackSend channel: 'jen-slackintegration', message: 'Build completed successfully: ${env.JOB_NAME} ${env.BUILD_ID}'
+            	}
+            
+            	failure {
+
+
+            		slackSend channel: 'jen-slackintegration', message: 'Build failed: ${env.JOB_NAME} ${env.BUILD_ID}'
+
+
+
+            	}
+
+
+            }	
+
+
+
+            }       
+
+
+		                      
+		stage('Testing') {
 		
-		stage('Build') {
+			steps {
+
+
+				sh "mvn test"
+
+				  }
+
+			post {
 			
-			steps {
+				always{
 
-				echo ("Build successful")
-
-				   }
-						}
-				   
-		stage('Test') {
-
-			steps {
-
-				echo ("Testing successful")
-				  
-				  }
-				  	
-				  	   }
+					junit 'target/surefire-reports/*.xml'
 
 
-        stage('Deploy') {
+   						}	  
+   				
+   				success {
+   				
+   					slackSend channel: 'jen-slackintegration', message: 'Build completed successfully: ${env.JOB_NAME} ${env.BUILD_ID}'	
 
-        	steps {
+   				}		
 
-        		echo ("Deployment Successful")
+   				failure {
 
-        		  }
+   					slackSend channel: 'jen-slackintegration', message: 'Build failed: ${env.JOB_NAME} ${env.BUILD_ID}'		
 
-        		  		}
+   				}
+
+               	}
 
 
 
+                           }   
 
-                          
+            stage('Archive artifact') {
+            
 
-		stage(' slacknotification') {
+            	steps {
 
-			steps {
+            		archiveArtifacts artifacts: 'samplejava/target/*.jar', followSymlinks: false
 
-				slackSend channel: '#jen-slackintegration', message: 'Build successful'
 
-				  }
-
-									}
+            	}
+            }                                
 
 
 
 
 
-			}
-	
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
