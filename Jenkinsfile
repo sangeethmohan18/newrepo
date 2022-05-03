@@ -37,7 +37,7 @@ pipeline{
 
 
 
-            }              
+                          
 
 		stage(' slacknotification') {
 
@@ -54,6 +54,8 @@ pipeline{
 
 
 			}
+	
+}
 
 
 
