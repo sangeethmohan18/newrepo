@@ -43,7 +43,7 @@ pipeline{
 
 			steps {
 
-				slackSend channel: '#jenkins-slack', message: 'Build successful'
+				slackSend channel: '#jen-slackintegration', message: 'Build successful'
 
 				  }
 
